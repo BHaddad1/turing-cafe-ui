@@ -1,28 +1,35 @@
 import React, { Component } from 'react';
 import './App.css';
-import fetchReservations from '../apiCalls';
+import {fetchReservations } from '../apiCalls';
 import Reservations from "../Reservations/Reservations";
 import Form from '../Form/Form';
+import { postReservation } from '../apiCalls';
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
-      reservations: []
+      reservations: [],
+      error: ""
     }
   }
 
   addReservation = (newRes) => {
-    this.setState({reservations: [...this.state.reservations, newRes]})
+    postReservation(newRes)
+      .then(data => {
+        fetchReservations()
+        .then(data => this.setState({reservations: data}))
+        .catch(err => this.setState({error: err}))
+      })
+      .catch(err => this.setState({error: err}))
   }
 
   componentDidMount() {
     fetchReservations()
-      .then(data => {
-        console.log(data);
-        this.setState({reservations: data});
-      })
+      .then(data => this.setState({reservations: data}))
+      .catch(err => this.setState({error: err}))
   }
+
   render() {
     return (
       <div className="App">
