@@ -8,7 +8,7 @@ class Form extends Component {
       name: "",
       date: "",
       time: "",
-      number: "",
+      number: 0,
     };
   }
 
@@ -19,9 +19,12 @@ class Form extends Component {
   handleClick = (event) => {
     event.preventDefault();
     const res = {
-      id: Date.now(),
-      ...this.state,
+      name: this.state.name,
+      date: this.state.date,
+      time: this.state.time,
+      number: Number(this.state.number)
     };
+    console.log(res)
     this.props.addReservation(res);
     this.clearInputs();
   };
